@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <title>navbar</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <h:form>
+                            <h:commandLink action="books" styleClass="navbar-brand">
+                                OnLi <i class="fa fa-book" aria-hidden="true">   </i>
+                            </h:commandLink>
+                        </h:form>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="active">                                
+                                <h:form>
+                                    <h:commandLink action="#{searchController.fillBooksByRating}" styleClass="navbar-brand top10viewd">
+                                        #{msg.top_10_viewd}  <i class="fa fa-eye" aria-hidden="true"> </i>
+                                        <f:ajax onevent="showProgress" event="click" render="@form pageCountForm contentUpload contentUploadForm :imageUploadForm :editBookLink :booksEditForm :booksTable :foundBooks :pagesForm1 :pagesForm2 :lettersForm #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')} #{searchController.numberOfEditForms('booksTable', 'updateVote')}" listener="#{searchController.fillBooksByRating}"></f:ajax>
+                                    </h:commandLink>
+                                </h:form>
+                            </li>
+                            <li>                               
+                                <h:form>
+                                    <h:commandLink action="#{searchController.fillBooksByViewDate}" styleClass="navbar-brand lastViewed">
+                                        #{msg.top_10_lastViewed}  <i class="fa fa-free-code-camp" aria-hidden="true"></i>
+                                        <f:ajax onevent="showProgress" event="click" render="@form pageCountForm contentUpload contentUploadForm :imageUploadForm :editBookLink :booksEditForm :booksTable :foundBooks :pagesForm1 :pagesForm2 :lettersForm #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')} #{searchController.numberOfEditForms('booksTable', 'updateVote')}" listener="#{searchController.fillBooksByViewDate}"></f:ajax>
+                                    </h:commandLink>
+                                </h:form>
+                            </li>
+                            <li>                               
+                                <h:form>
+                                    <h:commandLink action="#{searchController.fillBooksByUploadDate}" styleClass="navbar-brand recentlyAdded">
+                                        <f:ajax onevent="showProgress" event="click" render="@form pageCountForm contentUpload contentUploadForm :imageUploadForm :editBookLink :booksEditForm :booksTable :foundBooks :pagesForm1 :pagesForm2 :lettersForm #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')} #{searchController.numberOfEditForms('booksTable', 'updateVote')}" listener="#{searchController.fillBooksByUploadDate}"></f:ajax>
+                                        #{msg.top_10_recentlyAdded}  <i class="fa fa-thermometer-full" aria-hidden="true"></i> 
+                                    </h:commandLink>
+                                </h:form>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <h:form id="velcomMessage" >
+                                    <h:commandLink styleClass="navbar-brand welcomTitle">
+                                        <i class="fa fa-user" aria-hidden="true"></i> #{msg.welcom} #{loginController.username}
+                                    </h:commandLink>
+                                </h:form>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">#{msg.language}  <i class="fa fa-globe" aria-hidden="true"></i>    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <ui:insert name="locales">
+                                            <ui:include src="/templates/locales.xhtml"/>
+                                        </ui:insert>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-in" aria-hidden="true"></i>    #{msg.loginIn}    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li>                               
+                                        <h:form rendered="#{!loginController.isLogin}" id="login_form" onkeypress="if (event.keyCode == 13) {
+                                                    document.getElementById('login_form:loginSubmitButton').click();
+                                                    return false;
+                                                }">
+                                            <div class="input-group">
+                                                <p>#{msg.input_name} #{msg.or_word} Email:</p>
+                                                <h:inputText a:placeholder="#{msg.input_name} #{msg.or_word} Email" class="form-control" a:autofocus="true" id="username" value="#{loginController.username}">
+                                                    <f:validator validatorId="validators.login_validator" class="" />
+                                                    <f:ajax event="keyup" render="loginError"></f:ajax>
+                                                </h:inputText>
+                                            </div>
+                                            <p><h:message id="loginError" for="username" styleClass="error"></h:message></p>
+                                            <p>#{msg.password}:</p>
+                                            <h:inputSecret a:placeholder="#{msg.password}" redisplay="true" class="form-control" id="password" value="#{user.password}">
+                                                <f:validator validatorId="validators.password_validator" class="" />
+                                                <f:ajax event="keyup" render="passwordError"></f:ajax>
+                                            </h:inputSecret>
+                                            <p><h:message id="passwordError" for="password" styleClass="error"></h:message></p>
+                                            <p:captcha label="Captcha" />
+                                            <div class="input-group login_submit_button">
+                                                <button class="btn btn-primary">
+                                                    <h:commandButton id="loginSubmitButton" styleClass="btn-primary" value="#{msg.login_submit_button}" action="#{loginController.login()}">
+                                                        <f:ajax onevent="ShowMessage" event="keyup" render=":logoutForm loginFormError"></f:ajax>
+                                                    </h:commandButton>
+                                                </button>
+                                            </div>
+                                            <p><h:message id="loginFormError" for="login_form" styleClass="error"/></p>
+
+                                        </h:form>
+                                    </li>
+                                    <li>                                        
+                                        <h:form rendered="#{loginController.isLogin}" id="logoutForm">
+                                            <h:commandLink action="#{loginController.logout()}" styleClass="">
+                                                #{msg.exit}
+                                                <f:ajax event="click" render="@all" listener="#{loginController.logout()}"></f:ajax>
+                                                <f:ajax event="click" render="velcomMessage"/>
+                                            </h:commandLink>
+                                        </h:form>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>                        
+                                        <h:form>
+                                            <h:commandLink action="books" styleClass="">
+                                                #{msg.registration}
+                                            </h:commandLink>
+                                        </h:form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+
+        </ui:composition>
+    </h:body>
+</html>

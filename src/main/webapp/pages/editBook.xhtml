@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+        <p:dialog dynamic="true" id="editDialog" modal="true" widgetVar="dlgEditBook" resizable="false" header="#{msg.add_book}" closeOnEscape="true" closable="true">
+            <h:outputText value="This content is loaded lazy." />
+            <h:outputText value="#{searchController.selectedBook.name}" />
+            <h:form id="formEditBook">
+                <p:panelGrid columns="2" columnClasses="col1, col2" styleClass="edit_book_table" >
+
+                    <p:panel>
+
+                        <p:panelGrid id="bookDetails" columns="2" >
+                            <p:outputLabel value="#{msg.book_name}:" styleClass="edit-title"/>
+                            <p:inputText id="inputBookName" value="#{searchController.selectedBook.name}"   styleClass="edit-field"/>
+                            <p:outputLabel value="#{msg.author_name}:" styleClass="edit-title"/>
+                            <h:selectOneMenu styleClass="selectMenusInEdit" rendered="#{searchController.editMode}" value="#{b.author.id}">
+                                <f:selectItems value="#{authorController.selectItems}"></f:selectItems>
+                                <f:ajax event="change" render="@this"></f:ajax>
+                            </h:selectOneMenu>
+                            <p:outputLabel value="#{msg.genre}:" styleClass="edit-title"/>
+
+                            <p:outputLabel value="#{msg.publisher}:" styleClass="edit-title"/>
+
+                            <p:outputLabel value="#{msg.book_published_year}:" styleClass="edit-title"/>
+
+                            <p:outputLabel value="ISBN:" styleClass="edit-title"/>
+
+                            <p:outputLabel value="#{msg.book_page_count}:" styleClass="edit-title"/>
+
+                            <p:outputLabel value="#{msg.book_short_description}:" styleClass="edit-title"/>
+
+                            <f:facet name="footer">
+
+                                <p:commandButton styleClass="button-update" value="#{msg.save}" icon="ui-icon-check"  onclick="this.disabled = true;" update="">   
+                                </p:commandButton>
+                                <p:commandButton action="#{bookListController.cancelModes()}" icon="ui-icon-close"  value="#{msg.cancel}" immediate="true" global="false">  
+                                </p:commandButton>    
+
+
+                            </f:facet>
+
+                        </p:panelGrid>
+
+                    </p:panel>
+
+                </p:panelGrid>
+
+
+
+
+            </h:form>  
+
+
+
+        </p:dialog>
+
+
+
+
+    </h:body>
+</html>
+

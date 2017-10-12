@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 9, 2017 4:31:06 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="entity.Book" table="book" catalog="library" optimistic-lock="version">
+        <id name="id" type="java.lang.Long">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="author" class="entity.Author" fetch="select">
+            <column name="author_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="genre" class="entity.Genre" fetch="select">
+            <column name="genre_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="publisher" class="entity.Publisher" fetch="select">
+            <column name="publisher_id" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="name" length="45" not-null="true" />
+        </property>
+        <property name="content" type="binary">
+            <column name="content" not-null="true" />
+        </property>
+        <property name="pageCount" type="int">
+            <column name="page_count" not-null="true" />
+        </property>
+        <property name="isbn" type="string">
+            <column name="isbn" length="100" not-null="true" unique="true" />
+        </property>
+        <property name="publishYear" type="int">
+            <column name="publish_year" not-null="true" />
+        </property>
+        <property name="image" type="binary">
+            <column name="image" />
+        </property>
+        <property name="descr" type="string">
+            <column name="descr" length="5000" />
+        </property>
+        <property name="rating" type="java.lang.Integer">
+            <column name="rating" />
+        </property>
+        <property name="voteCount" type="java.lang.Long">
+            <column name="vote_count" />
+        </property>
+        <property name="viewDate" type="timestamp">
+            <column name="view_date" length="19" />
+        </property>
+        <property name="addDate" type="timestamp">
+            <column name="add_date" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

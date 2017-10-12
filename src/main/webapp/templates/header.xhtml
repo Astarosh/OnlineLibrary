@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+        <ui:composition>
+
+            <div>
+                <h1>#{msg.welcome_title}</h1>
+            </div>
+
+            <div class="search_div">
+                <h:form styleClass="search_form" id="searchForm">
+                    <h:inputText a:placeholder="#{msg.search_input_placeholder}" id="search_string" styleClass="search_string" value="#{searchController.chars}">
+                        <f:ajax onevent="showProgress" event="keyup" render="contentUpload contentUploadForm :imageUploadForm :pageCountForm :booksEditForm :genresForm :booksTable :foundBooks :pagesForm1 :pagesForm2 :lettersForm #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')} #{searchController.numberOfEditForms('booksTable', 'updateVote')}" listener="#{searchController.fillBooksBySearch()}"></f:ajax>
+                    </h:inputText>
+                    <h:selectOneMenu  id="selectGenre" value="#{searchController.searchType}" styleClass="selectTypeMenu">
+                        <f:selectItems value="${searchTypeController.searchList}"></f:selectItems>
+                        <f:ajax onevent="showProgress" event="change" render="contentUpload contentUploadForm :imageUploadForm :pageCountForm :booksEditForm :genresForm :booksTable :foundBooks :pagesForm1 :pagesForm2 :lettersForm #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')} " listener="#{searchController.fillBooksBySearch()}"></f:ajax>
+                    </h:selectOneMenu>
+                </h:form>
+            </div>
+
+            <div class="letters">
+                <h:form styleClass="" id="lettersForm">
+                    <ui:repeat value="#{lettersController.letters}" var="letter">
+                        <h:commandLink disabled="#{letter==searchController.letter? true :false}" action="#{searchController.fillBooksByLetter()}" value="#{letter}" styleClass="#{letter==searchController.letter? 'activeLink' : ''}">
+                            <f:param name="letter" value="#{letter}" />
+                            <f:ajax onevent="showProgress" event="click" render="@form contentUpload contentUploadForm :imageUploadForm :booksEditForm :genresForm :booksTable :foundBooks :pagesForm1 :pagesForm2 #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')} #{searchController.numberOfEditForms('booksTable', 'updateVote')}" listener="#{searchController.fillBooksByLetter()}"></f:ajax>
+                        </h:commandLink>
+                    </ui:repeat>
+                </h:form>
+            </div>
+
+        </ui:composition>
+
+
+    </h:body>
+</html>
+
