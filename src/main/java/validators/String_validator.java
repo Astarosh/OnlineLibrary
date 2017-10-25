@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package validators;
 
 import java.util.ResourceBundle;
@@ -13,10 +8,6 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-/**
- *
- * @author Ast
- */
 @FacesValidator("validators.string_validator")
 public class String_validator implements Validator {
 
@@ -25,7 +16,7 @@ public class String_validator implements Validator {
         FacesMessage message;
         ResourceBundle bundle = ResourceBundle.getBundle("nls.properties", FacesContext.getCurrentInstance().getViewRoot().getLocale());
         try {
-            String str = null;
+            String str;
             if (value == null) {
                 throw new IllegalArgumentException(bundle.getString("enter_concern"));
             } else if(value instanceof Number){

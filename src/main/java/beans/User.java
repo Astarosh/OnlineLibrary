@@ -15,6 +15,10 @@ public class User implements Serializable {
     public User() {
     }
 
+    public String goBooks() {
+        return "/pages/books.xhtml?faces-redirect=true";
+    }
+
     public String login() {
         isLogin = !isLogin;
         return "books";

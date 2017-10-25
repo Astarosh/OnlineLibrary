@@ -9,14 +9,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
-/**
- *
- * @author Ast
- */
 @RequestScoped
 @Named
 public class LettersController implements Serializable {

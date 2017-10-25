@@ -11,41 +11,42 @@ import entity.Book;
 import entity.Genre;
 import entity.HibernateUtil;
 import entity.Publisher;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Property;
 import org.hibernate.transform.Transformers;
 
 public class DataHelper {
 
     private SessionFactory sessionFactory = null;
     private static DataHelper dataHelper;
-    private final ProjectionList bookProjection;
+    private final ProjectionList BOOKPROJECTION;
 
     private DataHelper() {
         sessionFactory = HibernateUtil.getSessionFactory();
 
-        bookProjection = Projections.projectionList();
-        bookProjection.add(Projections.property("id"), "id");
-        bookProjection.add(Projections.property("name"), "name");
-        bookProjection.add(Projections.property("image"), "image");
-        bookProjection.add(Projections.property("genre"), "genre");
-        bookProjection.add(Projections.property("pageCount"), "pageCount");
-        bookProjection.add(Projections.property("isbn"), "isbn");
-        bookProjection.add(Projections.property("publisher"), "publisher");
-        bookProjection.add(Projections.property("author"), "author");
-        bookProjection.add(Projections.property("publishYear"), "publishYear");
-        bookProjection.add(Projections.property("descr"), "descr");
-        bookProjection.add(Projections.property("rating"), "rating");
-        bookProjection.add(Projections.property("voteCount"), "voteCount");
-        bookProjection.add(Projections.property("viewDate"), "viewDate");
-        bookProjection.add(Projections.property("addDate"), "addDate");
+        BOOKPROJECTION = Projections.projectionList();
+        BOOKPROJECTION.add(Projections.property("id"), "id");
+        BOOKPROJECTION.add(Projections.property("name"), "name");
+        BOOKPROJECTION.add(Projections.property("image"), "image");
+        BOOKPROJECTION.add(Projections.property("genre"), "genre");
+        BOOKPROJECTION.add(Projections.property("pageCount"), "pageCount");
+        BOOKPROJECTION.add(Projections.property("isbn"), "isbn");
+        BOOKPROJECTION.add(Projections.property("publisher"), "publisher");
+        BOOKPROJECTION.add(Projections.property("author"), "author");
+        BOOKPROJECTION.add(Projections.property("publishYear"), "publishYear");
+        BOOKPROJECTION.add(Projections.property("descr"), "descr");
+        BOOKPROJECTION.add(Projections.property("rating"), "rating");
+        BOOKPROJECTION.add(Projections.property("voteCount"), "voteCount");
+        BOOKPROJECTION.add(Projections.property("viewDate"), "viewDate");
+        BOOKPROJECTION.add(Projections.property("addDate"), "addDate");
     }
 
     public static DataHelper getInstance() {
@@ -87,7 +88,7 @@ public class DataHelper {
         return count;
     }
 
-    public void updateBook(Book book) {
+    public int updateBook(Book book) {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("update Book ");
         queryBuilder.append("set name = :name, ");
@@ -109,15 +110,12 @@ public class DataHelper {
         }
 
         queryBuilder.append("descr = :descr ");
-
         queryBuilder.append("where id = :id");
 
         Query query = getSession().createQuery(queryBuilder.toString());
-        LocalDateTime localDateTime = LocalDateTime.now();
-        System.out.println("LocalDateTime = " + localDateTime);
 
+        LocalDateTime localDateTime = LocalDateTime.now();
         Date date2 = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-        System.out.println("Date          = " + date2);
 
         query.setParameter("name", book.getName());
         query.setParameter("pageCount", book.getPageCount());
@@ -139,26 +137,46 @@ public class DataHelper {
             query.setParameter("content", book.getContent());
         }
         int result = query.executeUpdate();
+        return result;
     }
 
-    public void addBook(Book book) {
+    public String addBook(Book book) {
         LocalDateTime localDateTime = LocalDateTime.now();
         Date date2 = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
         book.setAddDate(date2);
         book.setViewDate(date2);
-        getSession().save(book);
+        Serializable save = getSession().save(book);
+        return save.toString();
     }
 
-    public void addAuthor(Author author) {
-        getSession().save(author);
+    public boolean addAuthor(Author author) {
+        List<Author> list = getAuthorByNameAdd(author.getFio());
+        if (list == null || list.isEmpty()) {
+            getSession().save(author);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public void addPublisher(Publisher publisher) {
-        getSession().save(publisher);
+    public boolean addPublisher(Publisher publisher) {
+        List<Publisher> list = getPublisherByName(publisher.getName());
+        if (list == null || list.isEmpty()) {
+            getSession().save(publisher);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public void addGenre(Genre genre) {
-        getSession().save(genre);
+    public boolean addGenre(Genre genre) {
+        List<Genre> list = getGenreByName(genre.getName());
+        if (list == null || list.isEmpty()) {
+            getSession().save(genre);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void updateRating(Long bookId, Integer bookRating, Long voteCount) {
@@ -194,6 +212,21 @@ public class DataHelper {
         ).add(Restrictions.ilike("fio", authorName, MatchMode.ANYWHERE)).list();
     }
 
+    public List<Author> getAuthorByNameAdd(String authorName) {
+        return getSession().createCriteria(Author.class
+        ).add(Restrictions.ilike("fio", authorName, MatchMode.EXACT)).list();
+    }
+
+    public List<Publisher> getPublisherByName(String publisherName) {
+        return getSession().createCriteria(Publisher.class
+        ).add(Restrictions.ilike("name", publisherName, MatchMode.EXACT)).list();
+    }
+
+    public List<Genre> getGenreByName(String genreName) {
+        return getSession().createCriteria(Genre.class
+        ).add(Restrictions.ilike("name", genreName, MatchMode.EXACT)).list();
+    }
+
     public List<Book> getBooksByAuthor(String authorName, int first, int last) {
         List<Author> list;
         Criteria cr;
@@ -211,7 +244,7 @@ public class DataHelper {
             cr.setFirstResult(first);
             cr.setMaxResults(last);
 
-            return cr.setProjection(bookProjection).setResultTransformer(Transformers.aliasToBean(Book.class
+            return cr.setProjection(BOOKPROJECTION).setResultTransformer(Transformers.aliasToBean(Book.class
             )).list();
         } else {
             return null;
@@ -222,7 +255,7 @@ public class DataHelper {
         Criteria criteria;
         criteria
                 = getSession().createCriteria(Book.class
-                ).setProjection(bookProjection).setResultTransformer(Transformers.aliasToBean(Book.class
+                ).setProjection(BOOKPROJECTION).setResultTransformer(Transformers.aliasToBean(Book.class
                 )).add(Restrictions.eq("genre.id", genreId));
         criteria.setFirstResult(first);
         criteria.setMaxResults(last);
@@ -248,7 +281,7 @@ public class DataHelper {
 
     public List<Book> getBooksByRating() {
         Criteria criteria;
-        criteria = getSession().createCriteria(Book.class).setProjection(bookProjection).setResultTransformer(Transformers.aliasToBean(Book.class));
+        criteria = getSession().createCriteria(Book.class).setProjection(BOOKPROJECTION).setResultTransformer(Transformers.aliasToBean(Book.class));
         criteria.setFirstResult(0);
         criteria.setMaxResults(5);
         criteria.addOrder(Order.desc("rating"));
@@ -257,7 +290,7 @@ public class DataHelper {
 
     public List<Book> getBooksByViewDate() {
         Criteria criteria;
-        criteria = getSession().createCriteria(Book.class).setProjection(bookProjection).setResultTransformer(Transformers.aliasToBean(Book.class));
+        criteria = getSession().createCriteria(Book.class).setProjection(BOOKPROJECTION).setResultTransformer(Transformers.aliasToBean(Book.class));
         criteria.setFirstResult(0);
         criteria.setMaxResults(5);
         criteria.addOrder(Order.desc("viewDate"));
@@ -266,15 +299,18 @@ public class DataHelper {
 
     public List<Book> getBooksByUploadDate() {
         Criteria criteria;
-        criteria = getSession().createCriteria(Book.class).setProjection(bookProjection).setResultTransformer(Transformers.aliasToBean(Book.class));
+        criteria = getSession().createCriteria(Book.class).setProjection(BOOKPROJECTION).setResultTransformer(Transformers.aliasToBean(Book.class));
         criteria.setFirstResult(0);
         criteria.setMaxResults(5);
         criteria.addOrder(Order.desc("addDate"));
         return criteria.list();
     }
-    
+
     public byte[] getContent(Long id) {
-        return (byte[]) getFieldValue("content", id);
+        Criteria criteria = getSession().createCriteria(Book.class);
+        criteria.setProjection(Property.forName("content"));
+        criteria.add(Restrictions.eq("id", id));
+        return (byte[]) criteria.uniqueResult();
     }
 
     public byte[] getImage(Long id) {
@@ -291,7 +327,7 @@ public class DataHelper {
         Criteria criteria;
         criteria
                 = getSession().createCriteria(Book.class
-                ).setProjection(bookProjection).setResultTransformer(Transformers.aliasToBean(Book.class
+                ).setProjection(BOOKPROJECTION).setResultTransformer(Transformers.aliasToBean(Book.class
                 )).add(Restrictions.ilike(field, value, matchMode));
         criteria.setFirstResult(first);
         criteria.setMaxResults(last);

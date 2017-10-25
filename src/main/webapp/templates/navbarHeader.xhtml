@@ -80,7 +80,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-in" aria-hidden="true"></i>    #{msg.loginIn}    <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li>                               
-                                        <h:form rendered="#{!loginController.isLogin}" id="login_form" onkeypress="if (event.keyCode == 13) {
+                                        <h:form rendered="#{!loginController.isLogin}" id="login_form" onkeypress="if (event.keyCode === 13) {
                                                     document.getElementById('login_form:loginSubmitButton').click();
                                                     return false;
                                                 }">
@@ -122,7 +122,8 @@
                                     <li role="separator" class="divider"></li>
                                     <li>                        
                                         <h:form>
-                                            <h:commandLink action="books" styleClass="">
+                                            <h:commandLink styleClass="" action="#{registrationController.openRegistration}" onclick="PF('dlgRegistration').show();">
+                                                <f:ajax event="click" render="@none"></f:ajax>
                                                 #{msg.registration}
                                             </h:commandLink>
                                         </h:form>

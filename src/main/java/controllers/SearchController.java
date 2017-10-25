@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.faces.context.FacesContext;
 import enums.SearchType;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import org.primefaces.context.RequestContext;
 
 @ManagedBean(eager = true)
 @javax.faces.bean.SessionScoped
@@ -35,14 +33,6 @@ public class SearchController implements Serializable {
     private int clickedPage; //нажатая страница
     private boolean editMode; // включен ли editmode
     private boolean addMode;
-
-    public boolean isAddMode() {
-        return addMode;
-    }
-
-    public void setAddMode(boolean addMode) {
-        this.addMode = addMode;
-    }
     private Author author; //
     private Publisher publisher;
     private Genre genre;
@@ -63,10 +53,25 @@ public class SearchController implements Serializable {
     }
 
     public void updateBooks() {
+        ResourceBundle bundle = ResourceBundle.getBundle("nls.properties", FacesContext.getCurrentInstance().getViewRoot().getLocale());
         if (selectedBook == null) {
-            DataHelper.getInstance().updateBook(currentBookList.get(0));
+            int result = DataHelper.getInstance().updateBook(currentBookList.get(0));
+            if (result == 1) {
+                FacesMessage message = new FacesMessage(bundle.getString("thank"), bundle.getString("book_updated"));
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            } else {
+                FacesMessage message = new FacesMessage(bundle.getString("sorry"), bundle.getString("book_update_fail"));
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
         } else {
-            DataHelper.getInstance().addBook(currentBookList.get(0));
+            String result = DataHelper.getInstance().addBook(currentBookList.get(0));
+            if (result != null) {
+                FacesMessage message = new FacesMessage(bundle.getString("thank"), bundle.getString("book_uploaded"));
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            } else {
+                FacesMessage message = new FacesMessage(bundle.getString("sorry"), bundle.getString("book_uploaded"));
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
         }
         switchEditMode();
         searchType = SearchType.ISBN;
@@ -264,55 +269,77 @@ public class SearchController implements Serializable {
     }
 
     public void addAuthor() {
-        ResourceBundle bundle = ResourceBundle.getBundle("nls.properties", FacesContext.getCurrentInstance().getViewRoot().getLocale());
-        FacesMessage message = new FacesMessage(bundle.getString("thank"), bundle.getString("author_added"));
-        FacesContext.getCurrentInstance().addMessage(null, message);
         LocalDate localDate;
         localDate = LocalDate.parse(birthDate);
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         author.setBirthday(date);
-        DataHelper.getInstance().addAuthor(author);
+        boolean isAuthorAdded;
+        isAuthorAdded = DataHelper.getInstance().addAuthor(author);
+        ResourceBundle bundle = ResourceBundle.getBundle("nls.properties", FacesContext.getCurrentInstance().getViewRoot().getLocale());
+        if (isAuthorAdded == true) {
+            FacesMessage message = new FacesMessage(bundle.getString("thank"), bundle.getString("author_added"));
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            FacesMessage message = new FacesMessage(bundle.getString("sorry"), bundle.getString("author_add_fail"));
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
     }
 
     public void addPublisher() {
         ResourceBundle bundle = ResourceBundle.getBundle("nls.properties", FacesContext.getCurrentInstance().getViewRoot().getLocale());
-        FacesMessage message = new FacesMessage(bundle.getString("thank"), bundle.getString("publisher_added"));
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        DataHelper.getInstance().addPublisher(publisher);
+        boolean isPublisherAdded;
+        isPublisherAdded = DataHelper.getInstance().addPublisher(publisher);
+        if (isPublisherAdded == true) {
+            FacesMessage message = new FacesMessage(bundle.getString("thank"), bundle.getString("publisher_added"));
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            FacesMessage message = new FacesMessage(bundle.getString("sorry"), bundle.getString("publisher_add_fail"));
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
     }
 
     public void addGenre() {
         ResourceBundle bundle = ResourceBundle.getBundle("nls.properties", FacesContext.getCurrentInstance().getViewRoot().getLocale());
-        FacesMessage message = new FacesMessage(bundle.getString("thank"), bundle.getString("genre_added"));
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        DataHelper.getInstance().addGenre(genre);
+        boolean isGenreAdded = DataHelper.getInstance().addGenre(genre);
+        if (isGenreAdded == true) {
+            FacesMessage message = new FacesMessage(bundle.getString("thank"), bundle.getString("genre_added"));
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            FacesMessage message = new FacesMessage(bundle.getString("sorry"), bundle.getString("genre_add_fail"));
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
     }
 
     public void fillBooksByRating() {
         booksPerPageForNav = 5;
         totalBookCountForNav = 5;
         currentBookList = DataHelper.getInstance().getBooksByRating();
-        System.out.println(currentBookList.size());
     }
 
     public void fillBooksByViewDate() {
         booksPerPageForNav = 5;
         totalBookCountForNav = 5;
         currentBookList = DataHelper.getInstance().getBooksByViewDate();
-        System.out.println(currentBookList.size());
     }
 
     public void fillBooksByUploadDate() {
         booksPerPageForNav = 5;
         totalBookCountForNav = 5;
         currentBookList = DataHelper.getInstance().getBooksByUploadDate();
-        System.out.println(currentBookList.size());
     }
 
     public void switchEditMode() {
         currentBookList = null;
         addMode = false;
         editMode = !editMode;
+    }
+
+    public boolean isAddMode() {
+        return addMode;
+    }
+
+    public void setAddMode(boolean addMode) {
+        this.addMode = addMode;
     }
 
     public String getBirthDate() {

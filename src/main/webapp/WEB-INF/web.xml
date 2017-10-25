@@ -19,10 +19,10 @@
     </servlet-mapping>
     <session-config>
         <session-timeout>
-            30
+            1200
         </session-timeout>
     </session-config>
-            <context-param>
+    <context-param>
         <param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
         <param-value>6LdSGzMUAAAAAMAHcmJgyCgudsDE-pxKcX84SJ5-</param-value>
     </context-param>
@@ -40,6 +40,20 @@
         <res-auth>Container</res-auth>
         <res-sharing-scope>Shareable</res-sharing-scope>
     </resource-ref>
+    <!--errors-->
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/errorpages/expired.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errorpages/empty.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/errorpages/empty.xhtml</location>
+    </error-page>
+    
     <!-- web fonts -->
     <mime-mapping>
         <extension>eot</extension>

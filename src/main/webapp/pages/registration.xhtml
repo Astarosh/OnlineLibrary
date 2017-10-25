@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+        <p:dialog dynamic="true" id="registrationDialog" modal="true" widgetVar="dlgRegistration" resizable="false" header="#{msg.registration_form}" closeOnEscape="true" closable="true">
+            <h:form>
+                <p:panelGrid columns="2" >  
+                    <h:outputText value="Email"/>   
+                    <p:inputText styleClass="EditsInDialog" maxlength="35" required="true" requiredMessage="#{msg.required_field}" id="text1">
+                        <p:keyFilter regEx="/[a-z0-9_\.\-@]/i"/>
+                    </p:inputText> 
+
+                    <h:outputText value="#{msg.name}" />   
+                    <p:inputText styleClass="EditsInDialog" id="text2" required="true" value="#{registrationController.user.username}" requiredMessage="#{msg.required_field}" maxlength="25" />   
+
+                    <h:outputText value="#{msg.password}" />  
+                    <p:inputText type="password" styleClass="EditsInDialog" id="text4" required="true" value="#{registrationController.user.password}" requiredMessage="#{msg.required_field}" maxlength="25" />
+                   
+                    <h:outputText value="#{msg.repeat_password}"/>  
+                    <p:inputText type="password" styleClass="EditsInDialog" id="text5" required="true" value="#{registrationController.passwordTwo}" requiredMessage="#{msg.required_field}" maxlength="25" />
+                    <p:commandButton action="#{registrationController.saveUser()}" value="#{msg.save}" onclick="PF('dlgRegistration').hide();"></p:commandButton>
+                    <p:commandButton immediate="true" value="#{msg.cancel}" onclick="PF('dlgRegistration').hide();"></p:commandButton>
+                </p:panelGrid> 
+            </h:form>  
+        </p:dialog>
+
+
+
+
+    </h:body>
+</html>
+

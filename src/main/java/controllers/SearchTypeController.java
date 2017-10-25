@@ -13,7 +13,7 @@ import javax.faces.context.FacesContext;
 @Named
 public class SearchTypeController implements Serializable {
 
-    private final Map<String, SearchType> searchList = new HashMap<>(); // хранит все виды поисков (по автору, по названию)
+    private final Map<String, SearchType> searchList = new HashMap<>(); // хранит все виды поисков (по автору, по названию, по ISBN)
 
     public SearchTypeController() {
 

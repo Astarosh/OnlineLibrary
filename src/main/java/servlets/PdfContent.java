@@ -34,7 +34,7 @@ public class PdfContent extends HttpServlet {
         try (OutputStream out = response.getOutputStream()) {
             long id = Long.valueOf(request.getParameter("id"));
             Boolean save = Boolean.valueOf(request.getParameter("save"));
-            String filename = request.getParameter("filename");
+            String filename = request.getParameter("bookName");
             
             byte[] content = DataHelper.getInstance().getContent(id);
             response.setContentLength(content.length);

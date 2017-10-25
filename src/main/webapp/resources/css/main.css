@@ -44,6 +44,22 @@ ul .dropdown-menu{
     margin-left: 5px;
     color: red;
 }
+.error-div-main{
+    margin-top: 50px;
+    height: 100px;
+    padding: 50px;
+    text-align: center;
+}
+
+.error-div-main form{
+    margin: 20px;
+    text-align: center;
+}
+
+.error-div-main label{
+    font-size: 30px;
+    color:#aeaeae;
+}
 /*end of navbar*/
 .middleRow{
     margin-top: 50px;

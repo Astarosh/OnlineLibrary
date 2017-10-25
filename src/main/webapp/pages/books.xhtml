@@ -7,7 +7,6 @@
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
         <title>Books</title>
     </h:head>
     <h:body>
@@ -16,8 +15,8 @@
             <ui:define name="title">
                 #{msg.book_list}
             </ui:define>
-
             <ui:define name="books_count">
+                <ui:include src="registration.xhtml"></ui:include> 
                 <h:form styleClass="pageCountForm" id="pageCountForm">
                     #{msg.book_quantity_perpage}: 
                     <h:inputText id="booksPerPage" styleClass="inputBooksCount" value="#{searchController.booksPerPageForNav}">
@@ -32,10 +31,11 @@
                         <h:commandButton action="#{searchController.switchAddMode}" rendered="#{!searchController.editMode}" value="#{msg.add_book}">
                             <f:ajax onevent="showProgress" render="@form imageUpload imageUploadForm contentUpload contentUploadForm :pageCountForm :pagesForm1 :pagesForm2 :foundBooks booksTable :imageUploadForm booksTable:0:column3Details #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')}"></f:ajax>
                         </h:commandButton>
-                        <h:commandButton action="#{searchController.updateBooks()}" rendered="#{searchController.editMode}" value="#{msg.save}">
-                            <f:ajax onevent="showProgress" render="@form booksTable contentUpload contentUploadForm :imageUploadForm booksTable:0:column3Details #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')}" />
-                        </h:commandButton>  
 
+                        <h:commandButton onclick="this.disabled=true;" action="#{searchController.updateBooks()}" rendered="#{searchController.editMode}" value="#{msg.save}">
+                            <f:ajax onevent="showProgress" render="@form updateBookMessages booksTable contentUpload contentUploadForm :imageUploadForm booksTable:0:column3Details #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')}" />
+                        </h:commandButton>  
+                        <p:growl id="updateBookMessages" showDetail="true" />
                         <h:commandButton immediate="true" action="#{searchController.switchEditMode()}" rendered="#{searchController.editMode}" value="#{msg.cancel}">
                             <f:ajax onevent="showProgress" render="@form contentUpload contentUploadForm :foundBooks :imageUploadForm booksTable booksTable:0:column3Details #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')}"/>
                         </h:commandButton>  
@@ -63,7 +63,7 @@
                                     </h:outputLink>
                                     <h:inputText a:placeholder="#{msg.book_name}" rendered="#{searchController.editMode}" id="bookInputName" styleClass="EditsInput" value="#{b.name}">
                                         <f:validator validatorId="validators.string_validator" class="" />
-                                        <f:ajax event="keyup" render="@this bookInputNameMessage"></f:ajax>
+                                        <f:ajax event="keyup" render="bookInputNameMessage"></f:ajax>
                                     </h:inputText>
 
                                     <h:commandLink id="editBookLink" action="#{searchController.selectEditBook()}" rendered="#{!searchController.editMode}" styleClass="bookNameEditLink">
@@ -81,20 +81,20 @@
                                     </h:selectOneMenu>
                                     <p:commandButton rendered="#{searchController.editMode}" value="+" type="button" onclick="PF('dlgAddAuthor').show();" />
                                     <p:dialog width="280" closeOnEscape="true" dynamic="true" header="#{msg.adding_author}" widgetVar="dlgAddAuthor" minHeight="40">
-                                        <h:form>
+                                        <h:form styleClass="noneBorder">
                                             <p:panel>
                                                 <p:outputLabel value="#{msg.author_name}"></p:outputLabel>
-                                                <h:inputText id="newAuthorFIO" styleClass="EditsInDialog" maxlength="30" required="true" requiredMessage="#{msg.required_field}" a:placeholder="#{msg.author_name}" value="#{searchController.author.fio}">
+                                                <h:inputText id="newAuthorFIO" styleClass="EditsInDialog" maxlength="26" required="true" requiredMessage="#{msg.required_field}" a:placeholder="#{msg.author_name}" value="#{searchController.author.fio}">
                                                     <f:validator validatorId="validators.string_validator"/>
-                                                    <f:ajax event="keyup" render="@this newAuthorFIOMessage"/>
+                                                    <f:ajax event="keyup" render="newAuthorFIOMessage"/>
                                                 </h:inputText>
-                                                <p><h:message id="newAuthorFIOMessage" for="newAuthorFIO" styleClass="error"></h:message></p>
+                                                <p:message id="newAuthorFIOMessage" for="newAuthorFIO" styleClass="error"></p:message>
                                                 <p:outputLabel value="#{msg.birthday}"></p:outputLabel>
                                                 <p:inputText styleClass="EditsInDialog" a:placeholder="#{msg.birthday}" type="date" value="#{searchController.birthDate}">
                                                     <f:ajax event="change" render="@this"/>
                                                 </p:inputText>
                                                 <p:commandButton styleClass="dialogButton" value="#{msg.save}" onclick="PF('dlgAddAuthor').hide();">
-                                                    <f:ajax event="click" render="@form messages4" listener="#{searchController.addAuthor()}"></f:ajax>
+                                                    <f:ajax event="click" render="@form messages4 booksTable:0:booksDescr_Input:selectAuthorName" listener="#{searchController.addAuthor()}"></f:ajax>
                                                 </p:commandButton>
                                                 <p:growl id="messages4" showDetail="true" />
                                             </p:panel>
@@ -105,13 +105,13 @@
                                     <h:panelGroup styleClass="booksAuthor" rendered="#{!searchController.editMode}"><strong>#{msg.book_page_count}: </strong>#{b.pageCount}</h:panelGroup>
                                     <h:inputText converterMessage="#{msg.concern_mustnot_contains_strings}" id="pageCountEdit" a:placeholder="#{msg.book_page_count}" rendered="#{searchController.editMode}" styleClass="EditsInput" value="#{b.pageCount}" maxlength="5">
                                         <f:validator validatorId="validators.number_validator"/>
-                                        <f:ajax event="keyup" render="@this pageCountEditMessage"></f:ajax>
+                                        <f:ajax event="keyup" render="pageCountEditMessage"></f:ajax>
                                     </h:inputText>
                                     <p><h:message id="pageCountEditMessage" for="pageCountEdit" styleClass="error"></h:message></p>
                                 </p>
                                 <p>
                                     <h:panelGroup styleClass="booksAuthor" rendered="#{!searchController.editMode}"><strong>#{msg.book_publisher}: </strong>#{b.publisher.name}</h:panelGroup>
-                                    <h:selectOneMenu styleClass="selectMenusInEdit" rendered="#{searchController.editMode}" value="#{b.publisher.id}">
+                                    <h:selectOneMenu id="selectPublisherName" styleClass="selectMenusInEdit" rendered="#{searchController.editMode}" value="#{b.publisher.id}">
                                         <f:selectItem noSelectionOption="true" rendered="#{searchController.addMode}" itemLabel="#{msg.book_publisher}:"></f:selectItem>
                                         <f:selectItems value="#{publisherController.selectItems}" noSelectionValue="#{msg.publisher}"></f:selectItems>
                                         <f:ajax event="change" render="@this"></f:ajax>
@@ -121,13 +121,13 @@
                                         <h:form>
                                             <p:panel>
                                                 <p:outputLabel value="#{msg.publisher}"></p:outputLabel>
-                                                <h:inputText id="newPublisherName" styleClass="EditsInDialog" maxlength="30" required="true" requiredMessage="#{msg.required_field}" a:placeholder="#{msg.publisher}" value="#{searchController.publisher.name}">
+                                                <h:inputText id="newPublisherName" styleClass="EditsInDialog" maxlength="26" required="true" requiredMessage="#{msg.required_field}" a:placeholder="#{msg.publisher}" value="#{searchController.publisher.name}">
                                                     <f:validator validatorId="validators.string_validator"/>
-                                                    <f:ajax event="keyup" render="@this newPublisherNameMessage"/>
+                                                    <f:ajax event="keyup" render="newPublisherNameMessage"/>
                                                 </h:inputText>
-                                                <p><h:message id="newPublisherNameMessage" for="newPublisherName" styleClass="error"></h:message></p>
+                                                <p:message id="newPublisherNameMessage" for="newPublisherName" styleClass="error"></p:message>
                                                 <p:commandButton styleClass="dialogButton" value="#{msg.save}" onclick="PF('dlgAddPublisher').hide();">
-                                                    <f:ajax event="click" render="@form messages5" listener="#{searchController.addPublisher()}"></f:ajax>
+                                                    <f:ajax event="click" render="@form messages5 booksTable:0:booksDescr_Input:selectPublisherName" listener="#{searchController.addPublisher()}"></f:ajax>
                                                 </p:commandButton>
                                                 <p:growl id="messages5" showDetail="true" />
                                             </p:panel>
@@ -138,7 +138,7 @@
                                     <h:panelGroup styleClass="booksAuthor" rendered="#{!searchController.editMode}"><strong>#{msg.book_published_year}: </strong>#{b.publishYear}</h:panelGroup>
                                     <h:inputText id="selectPublisherEdit" converterMessage="#{msg.concern_mustnot_contains_strings}" a:placeholder="#{msg.book_published_year}" rendered="#{searchController.editMode}" styleClass="EditsInput" value="#{b.publishYear}" maxlength="4">
                                         <f:validator validatorId="validators.number_validator" class="" />
-                                        <f:ajax event="keyup" render="@this selectPublisherEditMessage"></f:ajax>
+                                        <f:ajax event="keyup" render="selectPublisherEditMessage"></f:ajax>
                                     </h:inputText>
                                     <p><h:message id="selectPublisherEditMessage" for="selectPublisherEdit" styleClass="error"></h:message></p>
                                 </p>
@@ -146,13 +146,13 @@
                                     <h:panelGroup styleClass="booksAuthor" rendered="#{!searchController.editMode}"><strong>ISBN: </strong>#{b.isbn}</h:panelGroup>
                                     <h:inputText id="selectISBNedit" a:placeholder="ISBN" rendered="#{searchController.editMode}" styleClass="EditsInput" value="#{b.isbn}" requiredMessage="#{msg.required_field}" required="true">
                                         <f:validator validatorId="validators.string_validator" class="" />
-                                        <f:ajax event="keyup" render="@this selectISBNeditMessage"></f:ajax>
+                                        <f:ajax event="keyup" render="selectISBNeditMessage"></f:ajax>
                                     </h:inputText>
                                     <p><h:message id="selectISBNeditMessage" for="selectISBNedit" styleClass="error"></h:message></p>
                                 </p>
                                 <p>  
                                     <h:panelGroup styleClass="booksAuthor" rendered="#{!searchController.editMode}"><strong>#{msg.genre}: </strong>#{b.genre.name}</h:panelGroup>
-                                    <h:selectOneMenu styleClass="selectMenusInEdit" rendered="#{searchController.editMode}" value="#{b.genre.id}">
+                                    <h:selectOneMenu id="selectGenreName" styleClass="selectMenusInEdit" rendered="#{searchController.editMode}" value="#{b.genre.id}">
                                         <f:selectItem noSelectionOption="true" rendered="#{searchController.addMode}" itemLabel="#{msg.genre}:"></f:selectItem>
                                         <f:selectItems value="#{genreController.selectItems}"></f:selectItems>
                                         <f:ajax event="change" render="@this"></f:ajax>
@@ -162,13 +162,13 @@
                                         <h:form>
                                             <p:panel>
                                                 <p:outputLabel value="#{msg.genre}"></p:outputLabel>
-                                                <h:inputText id="newGenreName" styleClass="EditsInDialog" maxlength="30" required="true" requiredMessage="#{msg.required_field}" a:placeholder="#{msg.genre}" value="#{searchController.genre.name}">
+                                                <h:inputText id="newGenreName" styleClass="EditsInDialog" maxlength="26" required="true" requiredMessage="#{msg.required_field}" a:placeholder="#{msg.genre}" value="#{searchController.genre.name}">
                                                     <f:validator validatorId="validators.string_validator"/>
-                                                    <f:ajax event="keyup" render="@this newGenreNameMessage"/>
+                                                    <f:ajax event="keyup" render="newGenreNameMessage"/>
                                                 </h:inputText>
-                                                <p><h:message id="newGenreNameMessage" for="newGenreName" styleClass="error"></h:message></p>
+                                                <p:message id="newGenreNameMessage" for="newGenreName" styleClass="error"></p:message>
                                                 <p:commandButton styleClass="dialogButton" value="#{msg.save}" onclick="PF('dlgAddGenre').hide();">
-                                                    <f:ajax event="click" render="@form messages6" listener="#{searchController.addGenre()}"></f:ajax>
+                                                    <f:ajax event="click" render="@form messages6 booksTable:0:booksDescr_Input:selectGenreName" listener="#{searchController.addGenre()}"></f:ajax>
                                                 </p:commandButton>
                                                 <p:growl id="messages6" showDetail="true" />
                                             </p:panel>
@@ -181,12 +181,14 @@
                                         <h:outputLink styleClass="content_link" value="#{request.contextPath}/PdfContent" target="_blank">
                                             <h:outputText value=" #{msg.read}"></h:outputText>
                                             <f:param name="id" value="#{b.id}"/>
+                                            <f:param name="save" value="false"/>
                                         </h:outputLink>                   
                                         <h:graphicImage library="images" name="download.png" />
-                                        <h:outputLink styleClass="save_link" value="#{request.contextPath}/SavePdf" target="_blank"> 
+                                        <h:outputLink styleClass="save_link" value="#{request.contextPath}/PdfContent" target="_blank"> 
                                             <h:outputText value="#{msg.download}"></h:outputText>
                                             <f:param name="id" value="#{b.id}"/>
                                             <f:param name="bookName" value="#{b.name}"/>
+                                            <f:param name="save" value="true"/>
                                         </h:outputLink> 
                                     </h:form>
                                 </p>
@@ -199,7 +201,7 @@
                         <h:form id="column3Details">
                             <div class="book_details">
                                 <h:panelGroup styleClass="booksAuthor" rendered="#{!searchController.editMode}"><strong>#{msg.book_short_description}</strong><p>#{b.descr}</p></h:panelGroup>
-                                <h:inputTextarea cols="30" rows="12" id="bookDescrTextArea" a:placeholder="#{msg.book_short_description} #{b.descr}" rendered="#{searchController.editMode}" styleClass="EditsInput" value="#{b.descr}" requiredMessage="#{msg.required_field}" required="true">
+                                <h:inputTextarea  cols="30" rows="12" id="bookDescrTextArea" a:placeholder="#{msg.book_short_description} #{b.descr}" rendered="#{searchController.editMode}" styleClass="EditsInput" value="#{b.descr}" requiredMessage="#{msg.required_field}" required="true">
                                     <f:validator validatorId="validators.string_validator" class="" />
                                     <f:ajax event="keyup" render="bookDescrTextAreaMessage"></f:ajax>
                                 </h:inputTextarea>
@@ -212,7 +214,7 @@
                 <h:panelGroup id="imageUploadForm">
                     <h:form rendered="#{searchController.editMode}" id="imageUpload">
                         <p:fileUpload cancelLabel="#{msg.cancel}" label="#{msg.load_image}" uploadLabel="#{msg.load}" fileUploadListener="#{fileUploadView.handleFileUpload}" mode="advanced" dragDropSupport="true"
-                                      update="@this messages" sizeLimit="100000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                                      update="@this messages" invalidSizeMessage="#{msg.image_limit_message}" sizeLimit="200000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 
                         <p:growl id="messages" showDetail="true" />
                     </h:form>
@@ -220,7 +222,7 @@
                 <h:panelGroup id="contentUploadForm">
                     <h:form rendered="#{searchController.addMode}" id="contentUpload">
                         <p:fileUpload cancelLabel="#{msg.cancel}" label="#{msg.load_pdf}" uploadLabel="#{msg.load}" fileUploadListener="#{contentUploadView.handleFileUpload}" mode="advanced" dragDropSupport="true"
-                                      update="@this messages2" sizeLimit="100000000" allowTypes="/(\.|\/)(pdf)$/" />
+                                      update="@this messages2" invalidSizeMessage="#{msg.content_limit_message}" sizeLimit="50000000" fileLimit="1" allowTypes="/(\.|\/)(pdf)$/" />
 
                         <p:growl id="messages2" showDetail="true" />
                     </h:form>

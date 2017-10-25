@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
-/**
- *
- * @author Ast
- */
 import db.DataHelper;
 import java.util.ResourceBundle;
 import javax.faces.application.FacesMessage;
@@ -61,7 +52,7 @@ public class RatingView {
     }
 
     public void onrate(RateEvent rateEvent) {
-        ResourceBundle bundle = ResourceBundle.getBundle("nls.messages", FacesContext.getCurrentInstance().getViewRoot().getLocale());
+        ResourceBundle bundle = ResourceBundle.getBundle("nls.properties", FacesContext.getCurrentInstance().getViewRoot().getLocale());
         bookId = searchController.getBookIdForRating();
         voteCount = searchController.getBookVoteCountForRating();
         rating = (Integer) rateEvent.getRating();

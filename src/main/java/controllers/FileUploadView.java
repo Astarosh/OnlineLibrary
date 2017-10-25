@@ -1,23 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
-
-/**
- *
- * @author Ast
- */
 
 import java.util.ResourceBundle;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
- 
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.UploadedFile;
  
 @ManagedBean
 public class FileUploadView {
@@ -41,7 +29,7 @@ public class FileUploadView {
         this.searchController = searchController;
     }
     public void handleFileUpload(FileUploadEvent event) {
-        ResourceBundle bundle = ResourceBundle.getBundle("nls.messages", FacesContext.getCurrentInstance().getViewRoot().getLocale());
+        ResourceBundle bundle = ResourceBundle.getBundle("nls.properties", FacesContext.getCurrentInstance().getViewRoot().getLocale());
         image = event.getFile().getContents();
         searchController.getCurrentBookList().get(0).setImage(image);
         searchController.getCurrentBookList().get(0).setImageEdited(true);

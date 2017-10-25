@@ -1,12 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package validators;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -16,10 +9,6 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.servlet.http.Part;
 
-/**
- *
- * @author Ast
- */
 @FacesValidator("validators.imageUpload_validator")
 public class imageUpload_validator implements Validator {
 
