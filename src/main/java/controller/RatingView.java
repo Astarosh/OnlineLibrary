@@ -1,15 +1,15 @@
-package controllers;
+package controller;
 
 import db.DataHelper;
 import java.util.ResourceBundle;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
+import javax.inject.Named;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.event.RateEvent;
 
-@ManagedBean
+@Named
 public class RatingView {
 
     @ManagedProperty(value = "#{searchController}")

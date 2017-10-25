@@ -1,4 +1,4 @@
-package validators;
+package validator;
 
 import java.util.ResourceBundle;
 import javax.faces.application.FacesMessage;

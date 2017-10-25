@@ -1,6 +1,6 @@
-package controllers;
+package controller;
 
-import beans.User;
+import bean.User;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;

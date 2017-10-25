@@ -1,4 +1,4 @@
-package controllers;
+package controller;
 
 import java.util.ResourceBundle;
 import javax.faces.application.FacesMessage;
@@ -6,20 +6,19 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.FileUploadEvent;
-
+ 
 @ManagedBean
-public class ContentUploadView {
-
+public class ImageUploadView {
     @ManagedProperty(value = "#{searchController}")
     private SearchController searchController;
-    private byte[] content;
+    private byte[] image;
 
-    public byte[] getContent() {
-        return content;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setContent(byte[] content) {
-        this.content = content;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public SearchController getSearchController() {
@@ -29,12 +28,11 @@ public class ContentUploadView {
     public void setSearchController(SearchController searchController) {
         this.searchController = searchController;
     }
-
     public void handleFileUpload(FileUploadEvent event) {
         ResourceBundle bundle = ResourceBundle.getBundle("nls.properties", FacesContext.getCurrentInstance().getViewRoot().getLocale());
-        content = event.getFile().getContents();
-        searchController.getCurrentBookList().get(0).setContent(content);
-        searchController.getCurrentBookList().get(0).setContentEdited(true);
+        image = event.getFile().getContents();
+        searchController.getCurrentBookList().get(0).setImage(image);
+        searchController.getCurrentBookList().get(0).setImageEdited(true);
         FacesMessage message = new FacesMessage(bundle.getString("successfull"), event.getFile().getFileName() + " " + bundle.getString("uploaded"));
         FacesContext.getCurrentInstance().addMessage(null, message);
     }

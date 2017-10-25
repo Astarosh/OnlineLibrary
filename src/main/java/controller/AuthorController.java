@@ -1,4 +1,4 @@
-package controllers;
+package controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,16 +13,16 @@ import javax.enterprise.context.RequestScoped;
 @Named
 public class AuthorController implements Serializable {
 
-    private final List<SelectItem> selectItems = new ArrayList<>();
+    private final List<SelectItem> SELECTITEMS = new ArrayList<>();
     public AuthorController() {
         
         for (Author author : DataHelper.getInstance().getAllAuthors()) {
-            selectItems.add(new SelectItem(author.getId(), author.getFio()));
+            SELECTITEMS.add(new SelectItem(author.getId(), author.getFio()));
         }
     }
 
-    public List<SelectItem> getSelectItems() {
-        return selectItems;
+    public List<SelectItem> getSELECTITEMS() {
+        return SELECTITEMS;
     }
 
     

@@ -1,4 +1,4 @@
-package controllers;
+package controller;
 
 import enums.SearchType;
 import java.io.Serializable;
@@ -13,18 +13,18 @@ import javax.faces.context.FacesContext;
 @Named
 public class SearchTypeController implements Serializable {
 
-    private final Map<String, SearchType> searchList = new HashMap<>(); // хранит все виды поисков (по автору, по названию, по ISBN)
+    private final Map<String, SearchType> SEARCHLIST = new HashMap<>(); // хранит все виды поисков (по автору, по названию, по ISBN)
 
     public SearchTypeController() {
 
         ResourceBundle bundle = ResourceBundle.getBundle("nls.properties", FacesContext.getCurrentInstance().getViewRoot().getLocale());
-        searchList.clear();
-        searchList.put(bundle.getString("author_name"), SearchType.AUTHOR);
-        searchList.put(bundle.getString("book_name"), SearchType.NAME);
-        searchList.put("ISBN", SearchType.ISBN);
+        SEARCHLIST.clear();
+        SEARCHLIST.put(bundle.getString("author_name"), SearchType.AUTHOR);
+        SEARCHLIST.put(bundle.getString("book_name"), SearchType.NAME);
+        SEARCHLIST.put("ISBN", SearchType.ISBN);
     }
 
-    public Map<String, SearchType> getSearchList() {
-        return searchList;
+    public Map<String, SearchType> getSEARCHLIST() {
+        return SEARCHLIST;
     }
 }

@@ -1,4 +1,4 @@
-package controllers;
+package controller;
 
 import entity.Publisher;
 import db.DataHelper;
@@ -13,18 +13,18 @@ import javax.inject.Named;
 @Named
 public class PublisherController implements Serializable{
 
-    private final List<SelectItem> selectItems = new ArrayList<>();;
+    private final List<SelectItem> SELECTITEMS = new ArrayList<>();;
 
     public PublisherController() {
         List<Publisher> list = DataHelper.getInstance().getAllPublishers();
 
         for (Publisher publisher : list) {
-            selectItems.add(new SelectItem(publisher.getId(), publisher.getName()));
+            SELECTITEMS.add(new SelectItem(publisher.getId(), publisher.getName()));
         }
     }
     
-    public List<SelectItem> getSelectItems() {
-        return selectItems;
+    public List<SelectItem> getSELECTITEMS() {
+        return SELECTITEMS;
     }
 
 }

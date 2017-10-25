@@ -1,4 +1,4 @@
-package beans;
+package bean;
 
 import java.io.Serializable;
 import javax.inject.Named;

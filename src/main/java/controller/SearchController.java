@@ -1,4 +1,4 @@
-package controllers;
+package controller;
 
 import db.DataHelper;
 import entity.Author;
@@ -135,17 +135,16 @@ public class SearchController implements Serializable {
         }
     }
 
-    public String fillBooksByLetter() {
+    public void fillBooksByLetter() {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         if (params.containsKey("letter")) {
             letter = params.get("letter").trim();
         }
         someChangesToVariables(null, null, letter, SearchType.LETTER);
         currentBookList = DataHelper.getInstance().getBooksByLetter(letter, firstBookNumber, lastBookNumber);
-        return "books";
     }
 
-    public String fillBooksBySearch() {
+    public void fillBooksBySearch() {
         if (chars != null) {
             chars = chars.trim();
         } else {
@@ -172,7 +171,6 @@ public class SearchController implements Serializable {
                 currentBookList = DataHelper.getInstance().getBooksByName(chars, firstBookNumber, lastBookNumber);
                 break;
         }
-        return "books";
     }
 
     public String numberOfEditForms(String mainForm, String secondForm) {

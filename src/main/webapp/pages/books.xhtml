@@ -76,7 +76,7 @@
                                     <h:panelGroup styleClass="booksAuthor" rendered="#{!searchController.editMode}"><strong>#{msg.book_author_name}: </strong>#{b.author.fio}</h:panelGroup>
                                     <h:selectOneMenu styleClass="selectMenusInEdit" rendered="#{searchController.editMode}" id="selectAuthorName" value="#{b.author.id}">
                                         <f:selectItem noSelectionOption="true" rendered="#{searchController.addMode}" itemLabel="#{msg.book_author_name}:"></f:selectItem>
-                                        <f:selectItems value="#{authorController.selectItems}"></f:selectItems>
+                                        <f:selectItems value="#{authorController.SELECTITEMS}"></f:selectItems>
                                         <f:ajax event="change" render="@this"></f:ajax>
                                     </h:selectOneMenu>
                                     <p:commandButton rendered="#{searchController.editMode}" value="+" type="button" onclick="PF('dlgAddAuthor').show();" />
@@ -113,7 +113,7 @@
                                     <h:panelGroup styleClass="booksAuthor" rendered="#{!searchController.editMode}"><strong>#{msg.book_publisher}: </strong>#{b.publisher.name}</h:panelGroup>
                                     <h:selectOneMenu id="selectPublisherName" styleClass="selectMenusInEdit" rendered="#{searchController.editMode}" value="#{b.publisher.id}">
                                         <f:selectItem noSelectionOption="true" rendered="#{searchController.addMode}" itemLabel="#{msg.book_publisher}:"></f:selectItem>
-                                        <f:selectItems value="#{publisherController.selectItems}" noSelectionValue="#{msg.publisher}"></f:selectItems>
+                                        <f:selectItems value="#{publisherController.SELECTITEMS}" noSelectionValue="#{msg.publisher}"></f:selectItems>
                                         <f:ajax event="change" render="@this"></f:ajax>
                                     </h:selectOneMenu>
                                     <p:commandButton rendered="#{searchController.editMode}" value="+" type="button" onclick="PF('dlgAddPublisher').show();" />
@@ -154,7 +154,7 @@
                                     <h:panelGroup styleClass="booksAuthor" rendered="#{!searchController.editMode}"><strong>#{msg.genre}: </strong>#{b.genre.name}</h:panelGroup>
                                     <h:selectOneMenu id="selectGenreName" styleClass="selectMenusInEdit" rendered="#{searchController.editMode}" value="#{b.genre.id}">
                                         <f:selectItem noSelectionOption="true" rendered="#{searchController.addMode}" itemLabel="#{msg.genre}:"></f:selectItem>
-                                        <f:selectItems value="#{genreController.selectItems}"></f:selectItems>
+                                        <f:selectItems value="#{genreController.SELECTITEMS}"></f:selectItems>
                                         <f:ajax event="change" render="@this"></f:ajax>
                                     </h:selectOneMenu>
                                     <p:commandButton rendered="#{searchController.editMode}" value="+" type="button" onclick="PF('dlgAddGenre').show();" />
@@ -213,7 +213,7 @@
                 </h:dataTable>
                 <h:panelGroup id="imageUploadForm">
                     <h:form rendered="#{searchController.editMode}" id="imageUpload">
-                        <p:fileUpload cancelLabel="#{msg.cancel}" label="#{msg.load_image}" uploadLabel="#{msg.load}" fileUploadListener="#{fileUploadView.handleFileUpload}" mode="advanced" dragDropSupport="true"
+                        <p:fileUpload cancelLabel="#{msg.cancel}" label="#{msg.load_image}" uploadLabel="#{msg.load}" fileUploadListener="#{imageUploadView.handleFileUpload}" mode="advanced" dragDropSupport="true"
                                       update="@this messages" invalidSizeMessage="#{msg.image_limit_message}" sizeLimit="200000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 
                         <p:growl id="messages" showDetail="true" />

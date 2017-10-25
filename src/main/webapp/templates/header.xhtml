@@ -24,7 +24,7 @@
                         <f:ajax onevent="showProgress" event="keyup" render="contentUpload contentUploadForm :imageUploadForm :pageCountForm :booksEditForm :genresForm :booksTable :foundBooks :pagesForm1 :pagesForm2 :lettersForm #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')} #{searchController.numberOfEditForms('booksTable', 'updateVote')}" listener="#{searchController.fillBooksBySearch()}"></f:ajax>
                     </h:inputText>
                     <h:selectOneMenu  id="selectGenre" value="#{searchController.searchType}" styleClass="selectTypeMenu">
-                        <f:selectItems value="${searchTypeController.searchList}"></f:selectItems>
+                        <f:selectItems value="${searchTypeController.SEARCHLIST}"></f:selectItems>
                         <f:ajax onevent="showProgress" event="change" render="contentUpload contentUploadForm :imageUploadForm :pageCountForm :booksEditForm :genresForm :booksTable :foundBooks :pagesForm1 :pagesForm2 :lettersForm #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')} " listener="#{searchController.fillBooksBySearch()}"></f:ajax>
                     </h:selectOneMenu>
                 </h:form>

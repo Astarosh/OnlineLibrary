@@ -25,13 +25,14 @@ import org.hibernate.transform.Transformers;
 
 public class DataHelper {
 
-    private SessionFactory sessionFactory = null;
+    private final SessionFactory SESSIONFACTORY;
     private static DataHelper dataHelper;
     private final ProjectionList BOOKPROJECTION;
 
     private DataHelper() {
-        sessionFactory = HibernateUtil.getSessionFactory();
-
+        
+        SESSIONFACTORY = HibernateUtil.getSessionFactory();
+        
         BOOKPROJECTION = Projections.projectionList();
         BOOKPROJECTION.add(Projections.property("id"), "id");
         BOOKPROJECTION.add(Projections.property("name"), "name");
@@ -57,7 +58,7 @@ public class DataHelper {
     }
 
     private Session getSession() {
-        return sessionFactory.getCurrentSession();
+        return SESSIONFACTORY.getCurrentSession();
     }
 
     public int getAllBooksNumber(Long genreId, String searchString, String searchType, String letter) {

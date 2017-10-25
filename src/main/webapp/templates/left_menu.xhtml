@@ -17,7 +17,7 @@
                 <h:commandLink id="allBooksLink" disabled="#{searchController.genreId == -1? true :false}" action="#{searchController.fillBooksAll()}" value="#{msg.all_books}" styleClass="#{searchController.genreId == -1? 'activeLink' : ''}">
                     <f:ajax onevent="showProgress" event="click" render="@form contentUpload contentUploadForm :imageUploadForm :editBookLink :booksEditForm :booksTable :foundBooks :pagesForm1 :pagesForm2 :lettersForm #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')} #{searchController.numberOfEditForms('booksTable', 'updateVote')}" listener="#{searchController.fillBooksAll()}"></f:ajax>
                 </h:commandLink>
-                <ui:repeat value="#{genreController.genreList}" var="g">
+                <ui:repeat value="#{genreController.GENRELIST}" var="g">
                     <h:commandLink disabled="#{g.id==searchController.genreId? true :false}" action="#{searchController.fillBooksByGenre()}" value="#{g.name}" styleClass="#{g.id==searchController.genreId? 'activeLink' : ''}">
                         <f:param name="genreId" value="#{g.id}" />
                         <f:ajax onevent="showProgress" event="click" render="@form contentUpload contentUploadForm :imageUploadForm :editBookLink :booksEditForm :booksTable :foundBooks :pagesForm1 :pagesForm2 :lettersForm #{searchController.numberOfEditForms('booksTable', 'booksDescr_Input')} #{searchController.numberOfEditForms('booksTable', 'updateVote')}" listener="#{searchController.fillBooksByGenre()}"></f:ajax>

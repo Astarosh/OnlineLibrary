@@ -1,10 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package servlets;
+package servlet;
 
-import controllers.SearchController;
+import controller.SearchController;
 import java.io.IOException;
 import java.io.OutputStream;
 import javax.servlet.ServletException;
